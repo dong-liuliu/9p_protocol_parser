@@ -10,7 +10,7 @@ int display_stat = 0;
 int display_qid = 0;
 int display_data = 0;
 
-struct spec_info_t *spec_infos[Rlast - Tfirst - 1] = {NULL};
+struct spec_info_t *spec_infos[Rlast - Tfirst - 1] = { NULL };
 
 #define SPEC_INFO_INIT(_spec_name_) \
 	static struct spec_info_t spec_info_ ## _spec_name_ = { \
@@ -34,7 +34,6 @@ struct spec_info_t *spec_infos[Rlast - Tfirst - 1] = {NULL};
 		spec_infos[type2idx(_spec_name_)] = &spec_info_ ## _spec_name_; \
 	}
 
-
 #define P9_HEADER_SET(sm, msg) \
 		{ \
 			sm->msg = msg; \
@@ -50,12 +49,12 @@ struct spec_info_t *spec_infos[Rlast - Tfirst - 1] = {NULL};
 			printf("\ttag:%d", sm->tag); \
 		}while(0)
 
-
-static inline void printfn(nstr *str)
+static inline void printfn(nstr * str)
 {
 	printf("%d-%.*s", str->len, str->len, str->str);
 }
-static inline void printdata(int len, char* data)
+
+static inline void printdata(int len, char *data)
 {
 	if (display_data) {
 		int i;
@@ -64,7 +63,8 @@ static inline void printdata(int len, char* data)
 			printf(" %c", data[i]);
 	}
 }
-static inline void printqid(qid_t *qid)
+
+static inline void printqid(qid_t * qid)
 {
 	if (display_qid) {
 		printf("\t(qpath:%ld", qid->path);
@@ -72,7 +72,8 @@ static inline void printqid(qid_t *qid)
 		printf(" qtype:%d)", qid->type);
 	}
 }
-static inline void printstat(stat_t *stat)
+
+static inline void printstat(stat_t * stat)
 {
 	if (display_stat) {
 		printf("\n\tSTAT{");
@@ -88,15 +89,18 @@ static inline void printstat(stat_t *stat)
 		printf(" mtime:%d", stat->mtime);
 		printf(" length:%ld", stat->length);
 
-		printf("\tname:"); printfn(&stat->name);
-		printf(" uid:"); printfn(&stat->uid);
-		printf(" gid:"); printfn(&stat->gid);
-		printf(" muid:"); printfn(&stat->muid);
+		printf("\tname:");
+		printfn(&stat->name);
+		printf(" uid:");
+		printfn(&stat->uid);
+		printf(" gid:");
+		printfn(&stat->gid);
+		printf(" muid:");
+		printfn(&stat->muid);
 
 		printf(" }");
 	}
 }
-
 
 static int create_init_Tversion(struct p9_message_t *msg, void **spec_msg)
 {
@@ -105,7 +109,7 @@ static int create_init_Tversion(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tversion *sm;
 
 	sm = (struct p9_msg_Tversion *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -117,7 +121,7 @@ static int create_init_Tversion(struct p9_message_t *msg, void **spec_msg)
 	sm->msize = buf_get_int32(bufp);
 	buf_get_str(bufp, &sm->version);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -128,7 +132,8 @@ static int display_Tversion(void *spec_msg)
 
 	P9_HEADER_DISPLAY(sm);
 	printf("\tmsize:%d", sm->msize);
-	printf("\tVersion:"); printfn(&sm->version);
+	printf("\tVersion:");
+	printfn(&sm->version);
 	printf("\n");
 
 	return 0;
@@ -142,7 +147,7 @@ static int create_init_Tauth(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tauth *sm;
 
 	sm = (struct p9_msg_Tauth *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -155,7 +160,7 @@ static int create_init_Tauth(struct p9_message_t *msg, void **spec_msg)
 	buf_get_str(bufp, &sm->uname);
 	buf_get_str(bufp, &sm->aname);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -166,8 +171,10 @@ static int display_Tauth(void *spec_msg)
 
 	P9_HEADER_DISPLAY(sm);
 	printf("\tafid:%d", sm->afid);
-	printf("\tuname:"); printfn(&sm->uname);
-	printf("\taname:"); printfn(&sm->aname);
+	printf("\tuname:");
+	printfn(&sm->uname);
+	printf("\taname:");
+	printfn(&sm->aname);
 
 	printf("\n");
 
@@ -181,7 +188,7 @@ static int create_init_Tattach(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tattach *sm;
 
 	sm = (struct p9_msg_Tattach *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -195,7 +202,7 @@ static int create_init_Tattach(struct p9_message_t *msg, void **spec_msg)
 	buf_get_str(bufp, &sm->uname);
 	buf_get_str(bufp, &sm->aname);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -207,8 +214,10 @@ static int display_Tattach(void *spec_msg)
 	P9_HEADER_DISPLAY(sm);
 	printf("\tfid:%d", sm->fid);
 	printf("\tafid:%d", sm->afid);
-	printf("\tuname:"); printfn(&sm->uname);
-	printf("\taname:"); printfn(&sm->aname);
+	printf("\tuname:");
+	printfn(&sm->uname);
+	printf("\taname:");
+	printfn(&sm->aname);
 
 	printf("\n");
 
@@ -222,7 +231,7 @@ static int create_init_Rattach(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Rattach *sm;
 
 	sm = (struct p9_msg_Rattach *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -233,7 +242,7 @@ static int create_init_Rattach(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	buf_get_qid(bufp, &sm->qid);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -258,7 +267,7 @@ static int create_init_Rerror(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Rerror *sm;
 
 	sm = (struct p9_msg_Rerror *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -269,7 +278,7 @@ static int create_init_Rerror(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	buf_get_str(bufp, &sm->ename);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -279,7 +288,8 @@ static int display_Rerror(void *spec_msg)
 	struct p9_msg_Rerror *sm = (struct p9_msg_Rerror *)spec_msg;
 
 	P9_HEADER_DISPLAY(sm);
-	printf("\tename:"); printfn(&sm->ename);
+	printf("\tename:");
+	printfn(&sm->ename);
 	printf("\n");
 
 	return 0;
@@ -293,7 +303,7 @@ static int create_init_Tflush(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tflush *sm;
 
 	sm = (struct p9_msg_Tflush *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -304,10 +314,11 @@ static int create_init_Tflush(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	sm->oldtag = buf_get_int16(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Tflush(void *spec_msg)
 {
 	struct p9_msg_Tflush *sm = (struct p9_msg_Tflush *)spec_msg;
@@ -319,22 +330,24 @@ static int display_Tflush(void *spec_msg)
 
 	return 0;
 }
+
 static int create_init_Rflush(struct p9_message_t *msg, void **spec_msg)
 {
 	struct p9_msg_Rflush *sm;
 
 	sm = (struct p9_msg_Rflush *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
 
 	P9_HEADER_SET(sm, msg);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Rflush(void *spec_msg)
 {
 	struct p9_msg_Rflush *sm = (struct p9_msg_Rflush *)spec_msg;
@@ -344,6 +357,7 @@ static int display_Rflush(void *spec_msg)
 
 	return 0;
 }
+
 /* 110 */
 static int create_init_Twalk(struct p9_message_t *msg, void **spec_msg)
 {
@@ -352,7 +366,7 @@ static int create_init_Twalk(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Twalk *sm;
 
 	sm = (struct p9_msg_Twalk *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -368,7 +382,7 @@ static int create_init_Twalk(struct p9_message_t *msg, void **spec_msg)
 	for (i = 0; i < sm->nwname; i++)
 		buf_get_str(bufp, &sm->wnames[i]);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -393,6 +407,7 @@ static int display_Twalk(void *spec_msg)
 
 	return 0;
 }
+
 /* 111 */
 static int create_init_Rwalk(struct p9_message_t *msg, void **spec_msg)
 {
@@ -401,7 +416,7 @@ static int create_init_Rwalk(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Rwalk *sm;
 
 	sm = (struct p9_msg_Rwalk *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -416,10 +431,11 @@ static int create_init_Rwalk(struct p9_message_t *msg, void **spec_msg)
 		buf_get_qid(bufp, &sm->wqids[i]);
 	}
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Rwalk(void *spec_msg)
 {
 	struct p9_msg_Rwalk *sm = (struct p9_msg_Rwalk *)spec_msg;
@@ -444,7 +460,7 @@ static int create_init_Topen(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Topen *sm;
 
 	sm = (struct p9_msg_Topen *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -456,10 +472,11 @@ static int create_init_Topen(struct p9_message_t *msg, void **spec_msg)
 	sm->fid = buf_get_int32(bufp);
 	sm->mode = buf_get_int8(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Topen(void *spec_msg)
 {
 	struct p9_msg_Topen *sm = (struct p9_msg_Topen *)spec_msg;
@@ -472,6 +489,7 @@ static int display_Topen(void *spec_msg)
 
 	return 0;
 }
+
 static int create_init_Ropen(struct p9_message_t *msg, void **spec_msg)
 {
 	struct cbuf buffer;
@@ -479,7 +497,7 @@ static int create_init_Ropen(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Ropen *sm;
 
 	sm = (struct p9_msg_Ropen *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -491,10 +509,11 @@ static int create_init_Ropen(struct p9_message_t *msg, void **spec_msg)
 	buf_get_qid(bufp, &sm->qid);
 	sm->iounit = buf_get_int32(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Ropen(void *spec_msg)
 {
 	struct p9_msg_Ropen *sm = (struct p9_msg_Ropen *)spec_msg;
@@ -517,7 +536,7 @@ static int create_init_Tcreate(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tcreate *sm;
 
 	sm = (struct p9_msg_Tcreate *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -531,7 +550,7 @@ static int create_init_Tcreate(struct p9_message_t *msg, void **spec_msg)
 	sm->perm = buf_get_int32(bufp);
 	sm->mode = buf_get_int8(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -543,15 +562,16 @@ static int display_Tcreate(void *spec_msg)
 	P9_HEADER_DISPLAY(sm);
 
 	printf("\tfid:%d", sm->fid);
-	printf("\tname:"); printfn(&sm->name);
+	printf("\tname:");
+	printfn(&sm->name);
 	printf("\tperm:%d", sm->perm);
 	printf("\tmode:%d", sm->mode);
-
 
 	printf("\n");
 
 	return 0;
 }
+
 /* 116 */
 static int create_init_Tread(struct p9_message_t *msg, void **spec_msg)
 {
@@ -560,7 +580,7 @@ static int create_init_Tread(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tread *sm;
 
 	sm = (struct p9_msg_Tread *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -573,7 +593,7 @@ static int create_init_Tread(struct p9_message_t *msg, void **spec_msg)
 	sm->offset = buf_get_int64(bufp);
 	sm->count = buf_get_int32(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -600,7 +620,7 @@ static int create_init_Rread(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Rread *sm;
 
 	sm = (struct p9_msg_Rread *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -612,10 +632,11 @@ static int create_init_Rread(struct p9_message_t *msg, void **spec_msg)
 	sm->count = buf_get_int32(bufp);
 	sm->data = buf_alloc(bufp, sm->count);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Rread(void *spec_msg)
 {
 	struct p9_msg_Rread *sm = (struct p9_msg_Rread *)spec_msg;
@@ -638,7 +659,7 @@ static int create_init_Twrite(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Twrite *sm;
 
 	sm = (struct p9_msg_Twrite *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -652,7 +673,7 @@ static int create_init_Twrite(struct p9_message_t *msg, void **spec_msg)
 	sm->count = buf_get_int32(bufp);
 	sm->data = buf_alloc(bufp, sm->count);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -673,7 +694,6 @@ static int display_Twrite(void *spec_msg)
 	return 0;
 }
 
-
 static int create_init_Rwrite(struct p9_message_t *msg, void **spec_msg)
 {
 	struct cbuf buffer;
@@ -681,7 +701,7 @@ static int create_init_Rwrite(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Rwrite *sm;
 
 	sm = (struct p9_msg_Rwrite *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -692,10 +712,11 @@ static int create_init_Rwrite(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	sm->count = buf_get_int32(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Rwrite(void *spec_msg)
 {
 	struct p9_msg_Rwrite *sm = (struct p9_msg_Rwrite *)spec_msg;
@@ -708,6 +729,7 @@ static int display_Rwrite(void *spec_msg)
 
 	return 0;
 }
+
 /* 120 */
 static int create_init_Tclunk(struct p9_message_t *msg, void **spec_msg)
 {
@@ -716,7 +738,7 @@ static int create_init_Tclunk(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tclunk *sm;
 
 	sm = (struct p9_msg_Tclunk *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -727,7 +749,7 @@ static int create_init_Tclunk(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	sm->fid = buf_get_int32(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -753,7 +775,7 @@ static int create_init_Tremove(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tremove *sm;
 
 	sm = (struct p9_msg_Tremove *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -764,7 +786,7 @@ static int create_init_Tremove(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	sm->fid = buf_get_int32(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -781,7 +803,6 @@ static int display_Tremove(void *spec_msg)
 	return 0;
 }
 
-
 /* 124 */
 static int create_init_Tstat(struct p9_message_t *msg, void **spec_msg)
 {
@@ -790,7 +811,7 @@ static int create_init_Tstat(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Tstat *sm;
 
 	sm = (struct p9_msg_Tstat *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -801,10 +822,11 @@ static int create_init_Tstat(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	sm->fid = buf_get_int32(bufp);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Tstat(void *spec_msg)
 {
 	struct p9_msg_Tstat *sm = (struct p9_msg_Tstat *)spec_msg;
@@ -817,6 +839,7 @@ static int display_Tstat(void *spec_msg)
 
 	return 0;
 }
+
 /* 125 */
 static int create_init_Rstat(struct p9_message_t *msg, void **spec_msg)
 {
@@ -825,7 +848,7 @@ static int create_init_Rstat(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Rstat *sm;
 
 	sm = (struct p9_msg_Rstat *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -836,10 +859,11 @@ static int create_init_Rstat(struct p9_message_t *msg, void **spec_msg)
 	buf_init(bufp, msg->msg_data, sm->size - 7);
 	buf_get_stat(bufp, &sm->stat);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
+
 static int display_Rstat(void *spec_msg)
 {
 	struct p9_msg_Rstat *sm = (struct p9_msg_Rstat *)spec_msg;
@@ -861,7 +885,7 @@ static int create_init_Twstat(struct p9_message_t *msg, void **spec_msg)
 	struct p9_msg_Twstat *sm;
 
 	sm = (struct p9_msg_Twstat *)malloc(sizeof(*sm));
-	if(!sm) {
+	if (!sm) {
 		*spec_msg = NULL;
 		return -1;
 	}
@@ -873,7 +897,7 @@ static int create_init_Twstat(struct p9_message_t *msg, void **spec_msg)
 	sm->fid = buf_get_int32(bufp);
 	buf_get_stat(bufp, &sm->stat);
 
-	*spec_msg = (void*)sm;
+	*spec_msg = (void *)sm;
 
 	return 0;
 }
@@ -887,12 +911,10 @@ static int display_Twstat(void *spec_msg)
 	printf("\tfid:%d", sm->fid);
 	printstat(&sm->stat);
 
-
 	printf("\n");
 
 	return 0;
 }
-
 
 SPEC_INFO_INIT(Tversion);
 #define create_init_Rversion create_init_Tversion
@@ -948,7 +970,6 @@ SPEC_INFO_INIT(Twstat);
 #define display_Rwstat display_Rflush
 SPEC_INFO_INIT(Rwstat);
 
-
 int p9_msg_display(struct p9_message_t *msg)
 {
 	uint8_t mtype;
@@ -958,9 +979,9 @@ int p9_msg_display(struct p9_message_t *msg)
 	mtype = p9_msg_type(msg);
 	spec_info = spec_infos[type2idx(mtype)];
 
-	if(spec_info) {
+	if (spec_info) {
 		spec_info->create_init_spec(msg, &spec_msg);
-		if(!spec_msg) {
+		if (!spec_msg) {
 			printf("spec_msg failed on create\n");
 			return -1;
 		}
