@@ -2,9 +2,9 @@ This is used to parse 9Pfs msg data catched by third-party tools, like tcpflow.
 Parts of code are gotten from spfs(one 9pfs server).
 
 Usage related tools
-u9fs/spfs and socat -- 
+u9fs/spfs and socat --
 	socat TCP4-LISTEN:5640,range=127.0.0.1/32 EXEC:"./u9fs -a none -u `dong` /tmp/9pfs_server_dir"
-	
+
 tcpflow --
 	tcpflow -i lo port 5640
 

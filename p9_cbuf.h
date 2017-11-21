@@ -223,6 +223,9 @@ buf_get_qid(struct cbuf *buf, qid_t *qid)
 static inline void
 buf_get_stat(struct cbuf *buf, stat_t *stat)
 {
+	/* there are useless 2 byte ahead of Stat*/
+	buf_get_int16(buf);
+
 	stat->size = buf_get_int16(buf);
 	stat->type = buf_get_int16(buf);
 	stat->dev = buf_get_int32(buf);

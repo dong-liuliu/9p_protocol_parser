@@ -6,9 +6,9 @@
 #include "p9_cbuf.h"
 
 /* on-off switch to show details */
-int display_stat = 0;
-int display_qid = 0;
-int display_data = 0;
+int display_stat = 1;
+int display_qid = 1;
+int display_data = 1;
 
 struct spec_info_t *spec_infos[Rlast - Tfirst - 1] = { NULL };
 
@@ -78,16 +78,16 @@ static inline void printstat(stat_t * stat)
 	if (display_stat) {
 		printf("\n\tSTAT{");
 
-		printf(" size:%d", stat->size);
-		printf(" type:%d", stat->type);
-		printf(" dev:%d", stat->dev);
+		printf(" size:%u", stat->size);
+		printf(" type:%u", stat->type);
+		printf(" dev:%u", stat->dev);
 
 		printqid(&stat->qid);
 
-		printf("\tmode:%d", stat->mode);
-		printf(" atime:%d", stat->atime);
-		printf(" mtime:%d", stat->mtime);
-		printf(" length:%ld", stat->length);
+		printf("\tmode:%u", stat->mode);
+		printf(" atime:%u", stat->atime);
+		printf(" mtime:%u", stat->mtime);
+		printf(" length:%lu", stat->length);
 
 		printf("\tname:");
 		printfn(&stat->name);
